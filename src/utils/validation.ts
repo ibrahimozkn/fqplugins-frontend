@@ -27,3 +27,19 @@ export const validateSteamId = (steamId: string): string | null => {
 
   return null;
 };
+
+export const validateIp = (ip: string): string | null => {
+  const ipRegex = /^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$/;
+  if (!ipRegex.test(ip)) {
+    return "Please enter a valid IP address";
+  }
+  return null;
+};
+
+export const validatePort = (port: string): string | null => {
+  const portRegex = /^[0-9]{1,5}$/;
+  if (!portRegex.test(port)) {
+    return "Please enter a valid port number";
+  }
+  return null;
+};

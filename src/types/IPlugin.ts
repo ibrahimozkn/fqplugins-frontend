@@ -1,6 +1,8 @@
+import { ILicense } from "./ILicense";
+
 export interface IPlugin {
+  id: number;
   name: string;
-  description: string;
   version: string;
-  license: string;
+  licenses: ILicense[];
 }

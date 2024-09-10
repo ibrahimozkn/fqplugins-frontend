@@ -1,5 +1,5 @@
 import React from "react";
-import { FaPlus, FaPlug, FaSignOutAlt } from "react-icons/fa";
+import { FaPlus, FaPlug, FaSignOutAlt, FaTimes } from "react-icons/fa";
 import { useNavigate } from "react-router";
 import { useAuth } from "../hooks/useAuth";
 
@@ -49,6 +49,22 @@ function DashboardLayout({ children }: { children: React.ReactNode }) {
             >
               <FaPlug className="mr-2" />
               My Plugins
+            </a>
+          </li>
+          <li>
+            <a
+              className="flex items-center lg:hidden"
+              onClick={() => {
+                const drawer = document.getElementById(
+                  "my-drawer-2"
+                ) as HTMLInputElement;
+                if (drawer) {
+                  drawer.checked = false;
+                }
+              }}
+            >
+              <FaTimes className="mr-2" />
+              Close Menu
             </a>
           </li>
           <li className="mt-auto">

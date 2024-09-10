@@ -1,8 +1,22 @@
 import React, { useEffect, useState } from "react";
 import { IPlugin } from "../types/IPlugin";
+import { DashboardService } from "../features/dashboard/dashboardService";
 
 function MyPlugins() {
   const [plugins, setPlugins] = useState<IPlugin[]>([]);
+
+  useEffect(() => {
+    DashboardService.getUserPlugins()
+      .then((response) => {
+        console.log(response.data);
+        if (response.data) {
+          setPlugins(response.data);
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }, []);
 
   return (
     <>
@@ -14,16 +28,16 @@ function MyPlugins() {
               <th>Plugin Name</th>
               <th>Version</th>
               <th>License Key</th>
-              <th>Date Purchased</th>
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td>Example Plugin</td>
-              <td>1.0.0</td>
-              <td>XXXX-XXXX-XXXX-XXXX</td>
-              <td>2023-05-20</td>
-            </tr>
+            {plugins.map((plugin) => (
+              <tr key={plugin.id}>
+                <td>{plugin.name}</td>
+                <td>{plugin.version}</td>
+                <td>{plugin.licenses[0].key}</td>
+              </tr>
+            ))}
           </tbody>
         </table>
       </div>
