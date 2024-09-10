@@ -3,6 +3,16 @@ import { useNavigate } from "react-router-dom";
 import { authService } from "../features/auth/authService";
 import { User } from "../types/IUser";
 import { AuthResponse } from "../types/IAuthResponse";
+import {
+  getToken,
+  getUser,
+  removeRefreshToken,
+  removeToken,
+  removeUser,
+  setRefreshToken,
+  setStorageUser,
+  setToken,
+} from "../utils/storage";
 
 export const useAuth = () => {
   const [user, setUser] = useState<User | null>(null);
@@ -12,11 +22,11 @@ export const useAuth = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const savedUser = sessionStorage.getItem("user");
-    const token = sessionStorage.getItem("token");
+    const savedUser = getUser();
+    const token = getToken();
 
     if (savedUser && token) {
-      setUser(JSON.parse(savedUser));
+      setUser(savedUser);
     }
     setLoading(false);
   }, []);
@@ -30,15 +40,17 @@ export const useAuth = () => {
         password
       );
 
-      sessionStorage.setItem("token", response.token);
-      sessionStorage.setItem("user", JSON.stringify(response.user));
+      setToken(response.token);
+      setRefreshToken(response.refreshToken);
+      setStorageUser(response.user);
 
       setUser(response.user);
-      console.log("User set in state:", response.user);
+
+      console.log("User set in state:", getUser());
 
       setTimeout(() => {
         navigate("/dashboard");
-      }, 0);
+      });
     } catch (error) {
       console.error("Login failed:", error);
       setError("Invalid username or password");
@@ -48,9 +60,9 @@ export const useAuth = () => {
   };
 
   const logout = () => {
-    sessionStorage.removeItem("token");
-    sessionStorage.removeItem("user");
-    setUser(null);
+    removeToken();
+    removeUser();
+    removeRefreshToken();
 
     navigate("/", { replace: true });
   };
